@@ -19,7 +19,7 @@
 #include <libhal/serial.hpp>
 #include <libhal/steady_clock.hpp>
 
-struct application_resources
+struct hardware_map_t
 {
   hal::output_pin* led;
   hal::serial* console;
@@ -29,6 +29,6 @@ struct application_resources
 
 // Application function must be implemented by one of the compilation units
 // (.cpp) files.
-hal::status initialize_processor();
-hal::result<application_resources> initialize_platform();
-hal::status application(application_resources& p_framework);
+void initialize_processor();
+hardware_map_t initialize_platform();
+void application(hardware_map_t& p_framework);
