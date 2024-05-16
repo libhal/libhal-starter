@@ -24,6 +24,12 @@ if("${platform_library}" STREQUAL "")
         "Build environment variable LIBHAL_PLATFORM_LIBRARY is required for " "this project.")
 endif()
 
+if("${platform}" STREQUAL "")
+    message(FATAL_ERROR
+        "Build environment variable LIBHAL_PLATFORM is required for "
+        "this project.")
+endif()
+
 find_package(libhal-${platform_library} REQUIRED CONFIG)
 find_package(libhal-util REQUIRED CONFIG)
 
@@ -34,9 +40,9 @@ add_executable(${PROJECT_NAME}
 
 target_compile_options(${PROJECT_NAME} PRIVATE -g -Wall -Wextra)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     libhal::${platform_library}
     libhal::util)
 
 libhal_post_build(${PROJECT_NAME})
+libhal_disassemble(${PROJECT_NAME})

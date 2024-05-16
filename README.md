@@ -1,7 +1,7 @@
 # libhal-starter
 
 Before getting started, if you haven't used libhal before, follow the
-[Getting Started](https://libhal.github.io/3.0/getting_started/) guide.
+[Getting Started](https://libhal.github.io/getting_started/) guide.
 
 To build the project:
 
@@ -9,16 +9,46 @@ To build the project:
 conan build . -pr <target_name> -pr <compiler>
 ```
 
-For the `lpc4078` with `MinSizeRel`
+For the `lpc4078`
 
 ```bash
 conan build . -pr lpc4078 -pr arm-gcc-12.3
+```
+
+For the STM32F103 MicroMod V4:
+
+```bash
+conan build . -pr mod-stm32f1-v4 -pr arm-gcc-12.3
 ```
 
 ## Supported platforms
 
 - lpc4078
 - lpc4074
+- micromod
+  - lpc4078 MicroMod V5
+  - stm32f103c8 MicroMod V4
+- stm32f103c8
+
+## Installing Platform Profiles
+
+`lpc40` profiles:
+
+```bash
+conan config install -sf conan/profiles/v2 -tf profiles https://github.com/libhal/libhal-lpc40.git
+```
+
+`stm32f1` profiles:
+
+```bash
+conan config install -sf conan/profiles/v2 -tf profiles https://github.com/libhal/libhal-stm32f1.git
+```
+
+`micromod` profiles:
+
+```bash
+conan config install -sf conan/profiles/v1 -tf profiles https://github.com/libhal/libhal-micromod.git
+```
 
 ## Description of Files
 
