@@ -38,7 +38,7 @@ add_executable(${PROJECT_NAME}
     platforms/${platform}.cpp
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE -g -Wall -Wextra)
+target_compile_options(${PROJECT_NAME} PRIVATE -g -Wall -Wextra --save-temps)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     libhal::${platform_library}

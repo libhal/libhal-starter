@@ -14,9 +14,9 @@
 
 #include <libhal-micromod/micromod.hpp>
 
-#include <app/hardware_map.hpp>
+#include <app/resource_list.hpp>
 
-hardware_map_t initialize_platform()
+resource_list initialize_platform()
 {
   using namespace hal::literals;
 

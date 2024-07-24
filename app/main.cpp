@@ -1,30 +1,28 @@
-#include <chrono>
-
 #include <libhal-exceptions/control.hpp>
 #include <libhal-util/serial.hpp>
 #include <libhal-util/steady_clock.hpp>
 #include <libhal/error.hpp>
 #include <libhal/steady_clock.hpp>
 
-#include <app/hardware_map.hpp>
+#include <app/resource_list.hpp>
 
-hardware_map_t hardware_map{};
+resource_list resources{};
 
 int main()
 {
   using namespace std::chrono_literals;
 
   try {
-    hardware_map = initialize_platform();
+    resources = initialize_platform();
   } catch (...) {
     hal::halt();
   }
 
-  hal::set_terminate(+[]() { hardware_map.reset(); });
+  hal::set_terminate(+[]() { resources.reset(); });
 
-  auto& led = *hardware_map.led;
-  auto& clock = *hardware_map.clock;
-  auto& console = *hardware_map.console;
+  auto& led = *resources.led;
+  auto& clock = *resources.clock;
+  auto& console = *resources.console;
 
   hal::print(console, "Starting Application!\n");
   hal::print(console, "Will reset after ~10 seconds\n");
@@ -43,7 +41,7 @@ int main()
 
   hal::print(console, "Resetting!\n");
   hal::delay(clock, 100ms);
-  hardware_map.reset();
+  resources.reset();
 
   return 0;
 }
