@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <libhal/functional.hpp>
 #include <libhal/output_pin.hpp>
 #include <libhal/serial.hpp>
@@ -21,11 +23,10 @@
 
 struct resource_list
 {
-  hal::output_pin* led;
-  hal::serial* console;
-  hal::steady_clock* clock;
   hal::callback<void()> reset;
+  std::optional<hal::output_pin*> status_led;
+  std::optional<hal::serial*> console;
+  std::optional<hal::steady_clock*> clock;
 };
 
 resource_list initialize_platform();
-void application(resource_list& p_framework);

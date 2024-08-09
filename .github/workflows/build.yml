@@ -1,0 +1,47 @@
+name: ✅ Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 12 * * 0"
+
+jobs:
+  demo_check_mod-lpc40-v5:
+    uses: libhal/ci/.github/workflows/demo_builder.yml@5.x.y
+    with:
+      compiler_profile_url: https://github.com/libhal/arm-gnu-toolchain.git
+      compiler_profile: v1/arm-gcc-12.3
+      platform_profile_url: https://github.com/libhal/libhal-micromod.git
+      platform_profile: v1/mod-lpc40-v5
+    secrets: inherit
+
+  demo_check_mod-stm32f1-v4:
+    uses: libhal/ci/.github/workflows/demo_builder.yml@5.x.y
+    with:
+      compiler_profile_url: https://github.com/libhal/arm-gnu-toolchain.git
+      compiler_profile: v1/arm-gcc-12.3
+      platform_profile_url: https://github.com/libhal/libhal-micromod.git
+      platform_profile: v1/mod-stm32f1-v4
+    secrets: inherit
+
+  demo_check_lpc4078:
+    uses: libhal/ci/.github/workflows/demo_builder.yml@5.x.y
+    with:
+      compiler_profile_url: https://github.com/libhal/arm-gnu-toolchain.git
+      compiler_profile: v1/arm-gcc-12.3
+      platform_profile_url: https://github.com/libhal/libhal-arm-mcu.git
+      platform_profile: v1/lpc4078
+    secrets: inherit
+
+  demo_check_stm32f103c8:
+    uses: libhal/ci/.github/workflows/demo_builder.yml@5.x.y
+    with:
+      compiler_profile_url: https://github.com/libhal/arm-gnu-toolchain.git
+      compiler_profile: v1/arm-gcc-12.3
+      platform_profile_url: https://github.com/libhal/libhal-arm-mcu.git
+      platform_profile: v1/stm32f103c8
+    secrets: inherit

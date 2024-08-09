@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <libhal/units.hpp>
+#include <libhal-arm-mcu/dwt_counter.hpp>
+#include <libhal-arm-mcu/lpc40/clock.hpp>
+#include <libhal-arm-mcu/lpc40/constants.hpp>
+#include <libhal-arm-mcu/lpc40/output_pin.hpp>
+#include <libhal-arm-mcu/lpc40/uart.hpp>
+#include <libhal-arm-mcu/system_control.hpp>
 
-#include <libhal-armcortex/dwt_counter.hpp>
-#include <libhal-armcortex/startup.hpp>
-#include <libhal-armcortex/system_control.hpp>
-
-#include <libhal-lpc40/clock.hpp>
-#include <libhal-lpc40/constants.hpp>
-#include <libhal-lpc40/output_pin.hpp>
-#include <libhal-lpc40/uart.hpp>
-
-#include <app/resource_list.hpp>
+#include <resource_list.hpp>
 
 resource_list initialize_platform()
 {
   using namespace hal::literals;
 
   // Set the MCU to the maximum clock speed
-  hal::lpc40::maximum(10.0_MHz);
+  hal::lpc40::maximum(12.0_MHz);
 
   auto cpu_frequency = hal::lpc40::get_frequency(hal::lpc40::peripheral::cpu);
   static hal::cortex_m::dwt_counter counter(cpu_frequency);
@@ -45,9 +41,9 @@ resource_list initialize_platform()
   static hal::lpc40::output_pin led(1, 10);
 
   return {
-    .led = &led,
+    .reset = +[]() { hal::cortex_m::reset(); },
+    .status_led = &led,
     .console = &uart0,
     .clock = &counter,
-    .reset = +[]() { hal::cortex_m::reset(); },
   };
 }

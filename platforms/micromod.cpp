@@ -14,7 +14,7 @@
 
 #include <libhal-micromod/micromod.hpp>
 
-#include <app/resource_list.hpp>
+#include <resource_list.hpp>
 
 resource_list initialize_platform()
 {
@@ -23,9 +23,9 @@ resource_list initialize_platform()
   hal::micromod::v1::initialize_platform();
 
   return {
-    .led = &hal::micromod::v1::led(),
+    .reset = +[]() { hal::micromod::v1::reset(); },
+    .status_led = &hal::micromod::v1::led(),
     .console = &hal::micromod::v1::console(hal::buffer<128>),
     .clock = &hal::micromod::v1::uptime_clock(),
-    .reset = +[]() { hal::micromod::v1::reset(); },
   };
 }

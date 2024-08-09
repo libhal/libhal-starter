@@ -34,12 +34,12 @@ find_package(libhal-${platform_library} REQUIRED CONFIG)
 find_package(libhal-util REQUIRED CONFIG)
 
 add_executable(${PROJECT_NAME}
-    app/main.cpp
+    src/main.cpp
     platforms/${platform}.cpp
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE -g -Wall -Wextra --save-temps)
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC include .)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     libhal::${platform_library}
     libhal::util)

@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <libhal/units.hpp>
+#include <libhal-arm-mcu/dwt_counter.hpp>
+#include <libhal-arm-mcu/stm32f1/clock.hpp>
+#include <libhal-arm-mcu/stm32f1/constants.hpp>
+#include <libhal-arm-mcu/stm32f1/output_pin.hpp>
+#include <libhal-arm-mcu/stm32f1/uart.hpp>
+#include <libhal-arm-mcu/system_control.hpp>
 
-#include <libhal-armcortex/dwt_counter.hpp>
-#include <libhal-armcortex/startup.hpp>
-#include <libhal-armcortex/system_control.hpp>
-
-#include <libhal-stm32f1/clock.hpp>
-#include <libhal-stm32f1/constants.hpp>
-#include <libhal-stm32f1/output_pin.hpp>
-#include <libhal-stm32f1/uart.hpp>
-
-#include <app/resource_list.hpp>
+#include <resource_list.hpp>
 
 resource_list initialize_platform()
 {
@@ -41,12 +37,12 @@ resource_list initialize_platform()
                                     .baud_rate = 115200,
                                   });
 
-  static hal::stm32f1::output_pin led(1, 10);
+  static hal::stm32f1::output_pin led('C', 13);
 
   return {
-    .led = &led,
+    .reset = +[]() { hal::cortex_m::reset(); },
+    .status_led = &led,
     .console = &uart1,
     .clock = &counter,
-    .reset = +[]() { hal::cortex_m::reset(); },
   };
 }

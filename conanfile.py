@@ -14,11 +14,11 @@
 
 from conan import ConanFile
 
-required_conan_version = ">=2.0.14"
+required_conan_version = ">=2.2.2"
 
 
 class demos(ConanFile):
-    python_requires = "libhal-bootstrap/[^3.0.0]"
+    python_requires = "libhal-bootstrap/[^4.0.0]"
     python_requires_extend = "libhal-bootstrap.demo"
 
     def requirements(self):
