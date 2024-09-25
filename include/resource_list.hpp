@@ -23,10 +23,25 @@
 
 struct resource_list
 {
-  hal::callback<void()> reset;
+  /// Initialized 1st
+  hal::callback<void()> reset = +[] {
+    while (true) {
+      continue;
+    }
+  };
+  // Both status_led and clock are required in order to generate the terminate
+  // blink pattern.
   std::optional<hal::output_pin*> status_led;
-  std::optional<hal::serial*> console;
   std::optional<hal::steady_clock*> clock;
+  // Initialize 3rd to support logging error messages
+  std::optional<hal::serial*> console;
 };
 
-resource_list initialize_platform();
+/**
+ * @brief Initializes the target platform and the resource list
+ *
+ * @param p_list - the list of resources to initialize for the application to
+ * run properly. The initialize platform library should initialize each resource
+ * in the resoure list.
+ */
+void initialize_platform(resource_list& p_list);

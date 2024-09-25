@@ -26,6 +26,7 @@ resource_list resources{};
 [[noreturn]] void terminate_handler() noexcept
 {
   bool valid = resources.status_led && resources.clock;
+
   if (not valid) {
     // spin here until debugger is connected
     while (true) {
@@ -34,7 +35,7 @@ resource_list resources{};
   }
 
   // Otherwise, blink the led in a pattern, and wait for the debugger.
-  // On GDB, use the `where` command to see if you have the `terminate_handler`
+  // In GDB, use the `where` command to see if you have the `terminate_handler`
   // in your stack trace.
 
   auto& led = *resources.status_led.value();
@@ -57,16 +58,12 @@ void application();
 
 int main()
 {
-  try {
-    resources = initialize_platform();
-  } catch (...) {
-    while (true) {
-      // halt here and wait for a debugger to connect
-      continue;
-    }
-  }
-
+  // Setup the terminate handler before we call anything that can throw
   hal::set_terminate(terminate_handler);
+
+  // Initialize the platform and set as many resources as available for this the
+  // supported platforms.
+  initialize_platform(resources);
 
   try {
     application();
@@ -86,6 +83,10 @@ void application()
 {
   using namespace std::chrono_literals;
 
+  // Calling `value()` on the optional resources will perform a check and if the
+  // resource is not set, it will throw a std::bad_optional_access exception.
+  // If it is set, dereference it and store the address in the references below.
+  // When std::optional<T&> is in the standard, we will change to use that.
   auto& led = *resources.status_led.value();
   auto& clock = *resources.clock.value();
   auto& console = *resources.console.value();

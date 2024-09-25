@@ -21,28 +21,25 @@
 
 #include <resource_list.hpp>
 
-resource_list initialize_platform()
+void initialize_platform(resource_list& p_list)
 {
   using namespace hal::literals;
 
+  p_list.reset = +[]() { hal::cortex_m::reset(); };
   // Set the MCU to the maximum clock speed
   hal::stm32f1::maximum_speed_using_internal_oscillator();
 
   static hal::cortex_m::dwt_counter counter(
     hal::stm32f1::frequency(hal::stm32f1::peripheral::cpu));
+  p_list.clock = &counter;
+
+  static hal::stm32f1::output_pin led('C', 13);
+  p_list.status_led = &led;
 
   static hal::stm32f1::uart uart1(hal::port<1>,
                                   hal::buffer<128>,
                                   hal::serial::settings{
                                     .baud_rate = 115200,
                                   });
-
-  static hal::stm32f1::output_pin led('C', 13);
-
-  return {
-    .reset = +[]() { hal::cortex_m::reset(); },
-    .status_led = &led,
-    .console = &uart1,
-    .clock = &counter,
-  };
+  p_list.console = &uart1;
 }

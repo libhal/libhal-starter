@@ -21,15 +21,20 @@
 
 #include <resource_list.hpp>
 
-resource_list initialize_platform()
+void initialize_platform(resource_list& p_list)
 {
   using namespace hal::literals;
 
+  p_list.reset = +[]() { hal::cortex_m::reset(); };
   // Set the MCU to the maximum clock speed
   hal::lpc40::maximum(12.0_MHz);
 
   auto cpu_frequency = hal::lpc40::get_frequency(hal::lpc40::peripheral::cpu);
   static hal::cortex_m::dwt_counter counter(cpu_frequency);
+  p_list.clock = &counter;
+
+  static hal::lpc40::output_pin led(1, 10);
+  p_list.status_led = &led;
 
   static std::array<hal::byte, 64> receive_buffer{};
   static hal::lpc40::uart uart0(0,
@@ -37,13 +42,5 @@ resource_list initialize_platform()
                                 hal::serial::settings{
                                   .baud_rate = 115200,
                                 });
-
-  static hal::lpc40::output_pin led(1, 10);
-
-  return {
-    .reset = +[]() { hal::cortex_m::reset(); },
-    .status_led = &led,
-    .console = &uart0,
-    .clock = &counter,
-  };
+  p_list.console = &uart0;
 }

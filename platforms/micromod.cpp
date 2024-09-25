@@ -16,16 +16,14 @@
 
 #include <resource_list.hpp>
 
-resource_list initialize_platform()
+void initialize_platform(resource_list& p_list)
 {
   using namespace hal::literals;
+  p_list.reset = +[]() { hal::micromod::v1::reset(); },
 
   hal::micromod::v1::initialize_platform();
 
-  return {
-    .reset = +[]() { hal::micromod::v1::reset(); },
-    .status_led = &hal::micromod::v1::led(),
-    .console = &hal::micromod::v1::console(hal::buffer<128>),
-    .clock = &hal::micromod::v1::uptime_clock(),
-  };
+  p_list.status_led = &hal::micromod::v1::led();
+  p_list.clock = &hal::micromod::v1::uptime_clock();
+  p_list.console = &hal::micromod::v1::console(hal::buffer<128>);
 }

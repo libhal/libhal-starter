@@ -16,4 +16,5 @@
 // file is minimally this, then this shouldn't be an issue. This becomes a
 // problem if such a scheme is abused. So only do this for identical platform
 // implementations.
+
 #include "lpc4078.cpp"  // NOLINT(bugprone-suspicious-include)
